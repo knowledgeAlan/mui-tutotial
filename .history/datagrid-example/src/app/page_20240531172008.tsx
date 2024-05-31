@@ -1,4 +1,3 @@
-'use client'
 import React,{useEffect,useState} from "react";
 
 import Button from '@mui/material/Button';
@@ -26,31 +25,31 @@ export default function Home() {
     pageInfo: { hasNextPage },
   } = useQuery(paginationModel);
 
-  
- 
+  const paginationMetaRef = React.useRef<GridPaginationMeta>({});
+  // Memoize to avoid flickering when the `hasNextPage` is `undefined` during refetch
+  const paginationMeta = React.useMemo(() => {
+    if (
+      hasNextPage !== undefined &&
+      paginationMetaRef.current?.hasNextPage !== hasNextPage
+    ) {
+      paginationMetaRef.current = { hasNextPage };
+    }
+    return paginationMetaRef.current;
+  }, [hasNextPage]);
 
-  useEffect(() =>{
-
-
-    console.log("paginationModel==page",paginationModel.page);
-    console.log("paginationModel==pageSize",paginationModel.pageSize);
-
-    //点击下一页触发加载数据
-    
-  },[paginationModel])
 
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-white">
-          
-      <div style={{ height: 700,width: '100%'  }}>
+          <Button onClick={() => apiRef.current.setRowCount(1000)}>Set Row Count</Button>
+      <div style={{ height: 400 }}>
         <DataGrid
-          
+          apiRef={apiRef}
           rows={rows}
           {...data}
           initialState={{ ...data.initialState, pagination: { rowCount: -1 } }}
           estimatedRowCount={100}
-          
+          paginationMeta={paginationMeta}
           loading={isLoading}
           pageSizeOptions={[10, 25, 50, 100]}
           paginationModel={paginationModel}

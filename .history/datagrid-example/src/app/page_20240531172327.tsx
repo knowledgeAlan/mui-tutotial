@@ -26,18 +26,18 @@ export default function Home() {
     pageInfo: { hasNextPage },
   } = useQuery(paginationModel);
 
-  
- 
+  const paginationMetaRef = React.useRef<GridPaginationMeta>({});
+  // Memoize to avoid flickering when the `hasNextPage` is `undefined` during refetch
+  const paginationMeta = React.useMemo(() => {
+    if (
+      hasNextPage !== undefined &&
+      paginationMetaRef.current?.hasNextPage !== hasNextPage
+    ) {
+      paginationMetaRef.current = { hasNextPage };
+    }
+    return paginationMetaRef.current;
+  }, [hasNextPage]);
 
-  useEffect(() =>{
-
-
-    console.log("paginationModel==page",paginationModel.page);
-    console.log("paginationModel==pageSize",paginationModel.pageSize);
-
-    //点击下一页触发加载数据
-    
-  },[paginationModel])
 
 
   return (

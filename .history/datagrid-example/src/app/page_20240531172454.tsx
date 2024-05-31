@@ -34,9 +34,6 @@ export default function Home() {
 
     console.log("paginationModel==page",paginationModel.page);
     console.log("paginationModel==pageSize",paginationModel.pageSize);
-
-    //点击下一页触发加载数据
-    
   },[paginationModel])
 
 
